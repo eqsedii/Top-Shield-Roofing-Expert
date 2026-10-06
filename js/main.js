@@ -19,3 +19,13 @@ open('https://wa.me/254731889297?text='+encodeURIComponent(t),'_blank')};
 const sl=document.getElementById('slides');
 if(sl){const L=[2,5,1,3,4,6].map(i=>{const d=document.createElement('div');d.style.backgroundImage=`url(images/projects/p${i}.jpg)`;sl.append(d);return d});let k=0;L[0].classList.add('on');
 setInterval(()=>{L[k].classList.remove('on');k=(k+1)%L.length;L[k].classList.add('on')},5000)}
+const ld=document.createElement('div');ld.className='ld on';ld.innerHTML='<div><img src="images/logo-round.png" alt="Loading"></div>';document.body.append(ld);
+const hide=()=>ld.classList.remove('on');
+addEventListener('load',()=>setTimeout(hide,350));addEventListener('pageshow',hide);setTimeout(hide,3500);
+document.addEventListener('click',e=>{const a=e.target.closest('a[href]');
+if(!a||a.hasAttribute('data-lb')||e.defaultPrevented||e.ctrlKey||e.metaKey)return;
+const u=a.getAttribute('href');if(u.startsWith('#'))return;
+const same=a.origin===location.origin&&a.target!=='_blank';
+ld.classList.add('on');
+if(same){e.preventDefault();setTimeout(()=>location.href=a.href,650)}else setTimeout(hide,1200)});
+if(f)f.addEventListener('submit',()=>{ld.classList.add('on');setTimeout(hide,1500)});
