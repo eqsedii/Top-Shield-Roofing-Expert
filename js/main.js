@@ -16,3 +16,6 @@ const f=document.getElementById('enq');
 if(f)f.onsubmit=e=>{e.preventDefault();const d=new FormData(f);
 const t=`Hello Top Shield, I'm ${d.get('name')} (${d.get('phone')}). Service: ${d.get('svc')}. ${d.get('msg')}`;
 open('https://wa.me/254731889297?text='+encodeURIComponent(t),'_blank')};
+const sl=document.getElementById('slides');
+if(sl){const L=[2,5,1,3,4,6].map(i=>{const d=document.createElement('div');d.style.backgroundImage=`url(images/projects/p${i}.jpg)`;sl.append(d);return d});let k=0;L[0].classList.add('on');
+setInterval(()=>{L[k].classList.remove('on');k=(k+1)%L.length;L[k].classList.add('on')},5000)}
