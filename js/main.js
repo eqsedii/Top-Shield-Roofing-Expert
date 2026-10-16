@@ -20,7 +20,7 @@ obs();
 const f=document.getElementById('enq');
 if(f)f.onsubmit=e=>{e.preventDefault();const d=new FormData(f);
 const t=`Hello Top Shield, I'm ${d.get('name')} (${d.get('phone')}). Service: ${d.get('svc')}. ${d.get('msg')}`;
-open('https://wa.me/254731889297?text='+encodeURIComponent(t),'_blank')};
+open('https://wa.me/'+WAN+'?text='+encodeURIComponent(t),'_blank')};
 const sl=document.getElementById('slides');
 if(sl){const L=[2,5,1,3,4,6].map(i=>{const d=document.createElement('div');d.style.backgroundImage=`url(images/projects/p${i}.jpg)`;sl.append(d);return d});let k=0;L[0].classList.add('on');
 setInterval(()=>{L[k].classList.remove('on');k=(k+1)%L.length;L[k].classList.add('on')},5000)}
@@ -34,3 +34,12 @@ const same=a.origin===location.origin&&a.target!=='_blank';
 ld.classList.add('on');
 if(same){e.preventDefault();setTimeout(()=>location.href=a.href,650)}else setTimeout(hide,1200)});
 if(f)f.addEventListener('submit',()=>{ld.classList.add('on');setTimeout(hide,1500)});
+
+let WAN='254731889297';
+fetch(`${SB}/rest/v1/settings?select=key,value`,{headers:{apikey:SK,Authorization:'Bearer '+SK},signal:tm()}).then(r=>r.ok?r.json():[]).then(rows=>{const c={};rows.forEach(r=>c[r.key]=r.value);
+document.querySelectorAll('[data-s]').forEach(e=>{if(c[e.dataset.s])e.textContent=c[e.dataset.s]});
+if(c.phone){const d=c.phone.replace(/\D/g,''),i=d.startsWith('0')?'254'+d.slice(1):d;document.querySelectorAll('[data-ph]').forEach(e=>e.textContent=c.phone);document.querySelectorAll('a[href^="tel:"]').forEach(a=>a.href='tel:+'+i)}
+if(c.whatsapp){const d=c.whatsapp.replace(/\D/g,'');WAN=d;document.querySelectorAll('a[href*="wa.me"]').forEach(a=>a.href=a.href.replace(/wa\.me\/\d+/,'wa.me/'+d));document.querySelectorAll('[data-wa]').forEach(e=>e.textContent='+'+d)}
+if(c.facebook)document.querySelectorAll('a[href*="facebook.com"]').forEach(a=>a.href=c.facebook);
+document.querySelectorAll('footer .fg>div:last-child ul,.cinfo ul').forEach(u=>{if(c.email){const l=document.createElement('li'),a=document.createElement('a');a.href='mailto:'+c.email;a.textContent=c.email;l.append(a);u.append(l)}
+if(c.location){const l=document.createElement('li');l.textContent=c.location;u.append(l)}})}).catch(()=>{});
