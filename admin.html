@@ -5,20 +5,25 @@
 .ad input[type=file]{padding:1rem;border:2px dashed var(--royal);background:#fff}.pv,.lst{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:1rem 0}
 .pv img,.lst img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}.lst figure{margin:0}.lst button{width:100%;margin-top:4px;border:0;background:var(--red);color:#fff;padding:.4rem;border-radius:4px;font-size:.85rem;cursor:pointer}
 .out{float:right;background:none;border:2px solid #fff;color:#fff;border-radius:4px;padding:.3rem .8rem;cursor:pointer}.row2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-#msg{font-weight:600;color:var(--navy);margin:1rem 0;min-height:1.5em}small,.lk{color:var(--mute)}.lk a{color:var(--royal)}</style></head><body>
+#msg{font-weight:600;color:var(--navy);margin:1rem 0;min-height:1.5em}small,.lk{color:var(--mute)}.lk a{color:var(--royal)}body{background:#0B1F4D}.bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}.ov{position:fixed;inset:0;background:rgba(11,31,77,.4);z-index:-1}
+.ad{background:rgba(255,251,241,.95);padding:1.4rem;border-radius:8px;margin:1.5rem auto;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.page-head{background:rgba(11,31,77,.8)}.out{border-color:var(--navy);color:var(--navy)}
+.tb{position:relative}.tb img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}.tb button{position:absolute;top:4px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(11,31,77,.85);color:#fff;font-size:1rem;cursor:pointer}.tb .x{right:4px;background:var(--red)}.tb .r{left:4px}
+details.card{margin-top:1rem}summary{font-weight:700;cursor:pointer;font-size:1.1rem}label{font-weight:600;font-size:.9rem;color:var(--navy)}textarea{min-height:90px}
+</style></head><body><video class="bg" autoplay muted loop playsinline poster="images/admin-bg.jpg"><source src="images/admin-bg.mp4" type="video/mp4"></video><div class="ov"></div>
 <div class="page-head"><div class="wrap ph"><div><h1>Admin</h1><p>Upload new project photos. The newest always appear first.</p></div><img src="images/logo-round.png" alt="" width="130" height="130"></div></div>
 <main class="wrap ad"><p id="msg">Loading...</p>
 <section id="auth" hidden><div class="card"><h2>Admin sign in</h2><form id="fl"><input id="em" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" required><input id="pw" type="password" placeholder="Password (8+ characters)" autocomplete="current-password" required>
 <div class="row2"><button class="btn" type="submit">Log in</button><button class="btn ghost" id="su" type="button" style="color:var(--navy);border-color:var(--navy)">Sign up</button></div></form>
-<p class="lk" style="margin-top:1rem"><a href="#" id="fp">Forgot password?</a><br><small>Only 2 admin accounts are allowed. New admins tap Sign up, then confirm the email they receive.</small></p></div></section>
+<p class="lk" style="margin-top:1rem"><a href="#" id="fp">Forgot password?</a><br><small>New admins tap Sign up, then confirm the email they receive.</small></p></div></section>
 <section id="reset" hidden><div class="card"><h2>Set a new password</h2><form id="fr"><input id="np" type="password" placeholder="New password (8+ characters)" autocomplete="new-password" required><button class="btn" type="submit">Save password</button></form></div></section>
-<div id="panel" hidden><section><button class="out" id="lo" type="button">Log out</button><h2>Add photos</h2><p class="lead">Choose one or many photos. They are resized automatically.</p><input id="files" type="file" accept="image/*" multiple style="width:100%"><div class="pv" id="prev"></div>
-<button class="btn red" id="go" type="button">Upload photos</button><p><small id="who"></small></p></section><section style="padding-top:0"><h2>Latest photos on the site</h2><div class="lst" id="list"></div></section></div></main>
+<div id="panel" hidden><section><button class="out" id="lo" type="button">Log out</button><h2>Add photos</h2><p class="lead">Choose one or many photos. They are resized automatically.</p><input id="files" type="file" accept="image/*" multiple style="width:100%"><div class="pv" id="prev"></div><small id="cnt"></small>
+<button class="btn red" id="go" type="button">Upload photos</button><p><small id="who"></small></p></section><section style="padding-top:0"><h2>Latest photos on the site</h2><div class="lst" id="list"></div></section><section style="padding-top:0"><details class="card"><summary>Edit site content</summary><p class="lead">Change phone numbers, links and main texts. Leave a box empty to keep the original.</p><form id="fc"></form></details></section></div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 const SB="https://cvirdubkolrudhtmpvmy.supabase.co",SK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2aXJkdWJrb2xydWRodG1wdm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNzMyOTksImV4cCI6MjEwNzY0OTI5OX0.CRYHHjfdCCtfoBoN6Xoo5OpR6Z78reyJpgMvqi_lZkc",sb=supabase.createClient(SB,SK),$=i=>document.getElementById(i),msg=t=>$('msg').textContent=t,BK=SB+'/storage/v1/object/public/projects/';
 const show=n=>['auth','reset','panel'].forEach(x=>$(x).hidden=x!==n),back=location.origin+'/admin.html';
-const err=e=>/database error|limit/i.test(e.message)?'Sign-up is closed. Only 2 admins are allowed.':e.message;
+const err=e=>/database error|limit/i.test(e.message)?'Sign-up is closed.':e.message;
 async function start(){if(/type=recovery/.test(location.hash)){msg('');show('reset');return}const{data:{session}}=await sb.auth.getSession();session?enter(session):(msg(''),show('auth'))}
 function enter(s){msg('');$('who').textContent='Signed in as '+s.user.email;show('panel');load();if(location.hash)history.replaceState(null,'',location.pathname)}
 $('fl').onsubmit=async e=>{e.preventDefault();msg('Logging in...');const{data,error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});error?msg(/confirm/i.test(error.message)?'Please confirm your email first. Check your inbox.':error.message):enter(data.session)};
@@ -27,16 +32,30 @@ const{data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:
 $('fp').onclick=async e=>{e.preventDefault();const email=$('em').value.trim();if(!email)return msg('Type your email above first.');const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:back});msg(error?error.message:'Password reset email sent. Check your inbox.')};
 $('fr').onsubmit=async e=>{e.preventDefault();const{error}=await sb.auth.updateUser({password:$('np').value});if(error)return msg(error.message);history.replaceState(null,'',location.pathname);msg('Password updated.');start()};
 $('lo').onclick=async()=>{await sb.auth.signOut();location.hash='';location.reload()};
-$('files').onchange=()=>{$('prev').innerHTML=[...$('files').files].map(f=>`<img src="${URL.createObjectURL(f)}">`).join('')};
-async function shrink(f){const bm=await createImageBitmap(f),s=Math.min(1,1600/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);return new Promise(r=>c.toBlob(r,'image/jpeg',.82))}
-async function load(){const{data,error}=await sb.from('photos').select('id,path').order('created_at',{ascending:false}).limit(12);if(error){$('list').textContent='Could not load: '+error.message;return}
-$('list').innerHTML=data.length?data.map(p=>`<figure><img loading="lazy" src="${BK}${p.path}"><button data-id="${p.id}" data-p="${p.path}">Remove</button></figure>`).join(''):'<small>No photos uploaded here yet. Your earlier photos stay on the site.</small>'}
-$('go').onclick=async()=>{const fs=[...$('files').files];if(!fs.length)return msg('Choose photos first.');$('go').disabled=true;let ok=0;const bad=[],t0=Date.now();
+let sel=[];
+function draw(){$('prev').innerHTML=sel.map((x,i)=>`<div class="tb"><img src="${x.u}" style="transform:rotate(${x.r*90}deg)"><button class="x" data-x="${i}" aria-label="Delete">&#10005;</button><button class="r" data-r="${i}" aria-label="Rotate">&#8635;</button></div>`).join('');$('cnt').textContent=sel.length?sel.length+' photo(s) ready. Tap ✕ to delete one, ↻ to rotate.':''}
+$('files').onchange=()=>{[...$('files').files].forEach(f=>sel.push({f,r:0,u:URL.createObjectURL(f)}));$('files').value='';draw()};
+$('prev').onclick=e=>{const x=e.target.dataset.x,r=e.target.dataset.r;if(x!=null){sel.splice(+x,1)}else if(r!=null){sel[+r].r=(sel[+r].r+1)%4}else return;draw()};
+async function shrink(x){const bm=await createImageBitmap(x.f),q=x.r%2,w=q?bm.height:bm.width,h=q?bm.width:bm.height,s=Math.min(1,1600/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.round(w*s);c.height=Math.round(h*s);
+const t=c.getContext('2d');t.translate(c.width/2,c.height/2);t.rotate(x.r*Math.PI/2);t.drawImage(bm,-bm.width*s/2,-bm.height*s/2,bm.width*s,bm.height*s);return new Promise(r=>c.toBlob(r,'image/jpeg',.82))}
+var load=async function(){const{data,error}=await sb.from('photos').select('id,path').order('created_at',{ascending:false}).limit(12);if(error){$('list').textContent='Could not load: '+error.message;return}
+$('list').innerHTML=data.length?data.map(p=>`<figure><img loading="lazy" src="${BK}${p.path}"><button data-id="${p.id}" data-p="${p.path}">Remove</button></figure>`).join(''):'<small>No photos uploaded here yet. Your earlier photos stay on the site.</small>'};
+$('go').onclick=async()=>{const fs=sel;if(!fs.length)return msg('Choose photos first.');$('go').disabled=true;let ok=0;const bad=[],t0=Date.now();
 for(let i=0;i<fs.length;i++){try{msg(`Uploading ${i+1} of ${fs.length}...`);const path=`${t0}-${i}-${Math.random().toString(36).slice(2,7)}.jpg`;
 let r=await sb.storage.from('projects').upload(path,await shrink(fs[i]),{contentType:'image/jpeg',cacheControl:'31536000'});if(r.error)throw r.error;
 r=await sb.from('photos').insert({path,created_at:new Date(t0+(fs.length-i)*1000).toISOString()});if(r.error)throw r.error;ok++}catch(e){bad.push(i+1+' ('+e.message+')')}}
-msg(ok?`Done. ${ok} photo(s) added at the top. They show on the site right away.`+(bad.length?' Failed: '+bad.join(', '):''):'Nothing uploaded. '+bad.join(', '));if(ok){$('files').value='';$('prev').innerHTML='';load()}$('go').disabled=false};
+msg(ok?`Done. ${ok} photo(s) added at the top. They show on the site right away.`+(bad.length?' Failed: '+bad.join(', '):''):'Nothing uploaded. '+bad.join(', '));if(ok){sel=[];draw();load()}$('go').disabled=false};
 $('list').onclick=async e=>{const id=e.target.dataset.id;if(!id||!confirm('Remove this photo from the site?'))return;
 const a=await sb.from('photos').delete().eq('id',id);if(a.error)return msg(a.error.message);await sb.storage.from('projects').remove([e.target.dataset.p]);msg('Removed.');load()};
+const F=[['phone','Phone number','0731 889 297'],['whatsapp','WhatsApp number (country code, digits only)','254731889297'],['facebook','Facebook page link','https://www.facebook.com/profile.php?id=100088681273731'],['email','Email address (optional)',''],['location','Location / address (optional)',''],
+['hero_title','Home page headline','Roofs built to protect your home'],['hero_text','Home page intro','We install, replace and repair roofs for homes and buildings. Honest advice, neat work, a roof that lasts.',1],['home_intro','Home page "about" paragraph','We focus on roofing only, so every project gets proper planning, solid timber work and careful finishing.',1],
+['about_text','About page paragraph','Top Shield Roofing Expert is a roofing specialist.',1],['tagline','Footer tagline','Roofing done properly, from the timber frame to the final tile.'],
+['s1_t','Service 1 title','Roof installation'],['s1_d','Service 1 text','',1],['s2_t','Service 2 title','Re-roofing and replacement'],['s2_d','Service 2 text','',1],['s3_t','Service 3 title','Roof repairs'],['s3_d','Service 3 text','',1],['s4_t','Service 4 title','Roof inspection and quotes'],['s4_d','Service 4 text','',1]];
+async function loadC(){const{data}=await sb.from('settings').select('key,value'),c={};(data||[]).forEach(r=>c[r.key]=r.value);
+$('fc').innerHTML=F.map(([k,l,p,t])=>`<label for="c_${k}">${l}</label>${t?`<textarea id="c_${k}" data-k="${k}" placeholder="${p.replace(/"/g,'&quot;')}"></textarea>`:`<input id="c_${k}" data-k="${k}" placeholder="${p.replace(/"/g,'&quot;')}">`}`).join('')+'<button class="btn" type="submit">Save changes</button>';
+$('fc').querySelectorAll('[data-k]').forEach(e=>e.value=c[e.dataset.k]||'')}
+$('fc').onsubmit=async e=>{e.preventDefault();const up=[],del=[];$('fc').querySelectorAll('[data-k]').forEach(i=>{const v=i.value.trim();v?up.push({key:i.dataset.k,value:v}):del.push(i.dataset.k)});
+msg('Saving...');let r=up.length?await sb.from('settings').upsert(up):{};if(!r.error&&del.length)r=await sb.from('settings').delete().in('key',del);msg(r.error?r.error.message:'Saved. Refresh the website to see the changes.')};
+const _l=load;load=function(){_l();loadC()};
 start();
 </script></body></html>
