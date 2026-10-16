@@ -1,3 +1,4 @@
+if(/\.html$/.test(location.pathname))history.replaceState(null,'',location.pathname.replace(/index\.html$/,'').replace(/\.html$/,'')+location.search+location.hash);
 document.documentElement.classList.add('js');
 const h=document.querySelector('header'),n=document.querySelector('nav'),m=document.querySelector('.menu');
 addEventListener('scroll',()=>h.classList.toggle('sc',scrollY>20),{passive:true});
@@ -8,9 +9,13 @@ const lb=document.createElement('div');lb.className='lb';lb.innerHTML='<button a
 lb.onclick=()=>lb.classList.remove('o');
 document.addEventListener('click',e=>{const a=e.target.closest('[data-lb]');if(a){e.preventDefault();lb.querySelector('img').src=a.href;lb.classList.add('o')}});
 addEventListener('keydown',e=>e.key==='Escape'&&lb.classList.remove('o'));
-const g=document.getElementById('gallery');
-if(g){for(let i=1;i<=PROJECT_COUNT;i++){const a=document.createElement('a');a.href=`images/projects/p${i}.jpg`;a.dataset.lb=1;a.className='rv';
-a.innerHTML=`<img loading="lazy" src="images/projects/p${i}.jpg" alt="Top Shield roofing project ${i}" onerror="this.parentNode.remove()">`;g.append(a)}}
+const g=document.getElementById('gallery'),SB='https://cvirdubkolrudhtmpvmy.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2aXJkdWJrb2xydWRodG1wdm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNzMyOTksImV4cCI6MjEwNzY0OTI5OX0.CRYHHjfdCCtfoBoN6Xoo5OpR6Z78reyJpgMvqi_lZkc',tm=()=>AbortSignal.timeout?AbortSignal.timeout(4000):undefined;
+const cloud=fetch(`${SB}/rest/v1/photos?select=path&order=created_at.desc`,{headers:{apikey:SK,Authorization:'Bearer '+SK},signal:tm()}).then(r=>r.ok?r.json():[]).then(a=>a.map(x=>`${SB}/storage/v1/object/public/projects/${x.path}`)).catch(()=>[]);
+const local=fetch('projects.json?'+Date.now()).then(r=>r.json()).then(j=>j.photos.map(p=>'images/projects/'+p)).catch(()=>typeof PROJECT_COUNT!=='undefined'?Array.from({length:PROJECT_COUNT},(_,i)=>`images/projects/p${i+1}.jpg`):[]);
+Promise.all([cloud,local]).then(([c,l])=>{const ps=[...c,...l];
+if(g)ps.forEach((p,i)=>{const a=document.createElement('a');a.href=p;a.dataset.lb=1;a.className='rv';
+a.innerHTML=`<img loading="lazy" src="${p}" alt="Top Shield roofing project ${i+1}" onerror="this.parentNode.remove()">`;g.append(a)});
+document.querySelectorAll('.feat a').forEach((a,i)=>{if(ps[i]){a.href=ps[i];a.querySelector('img').src=ps[i]}});obs()});
 obs();
 const f=document.getElementById('enq');
 if(f)f.onsubmit=e=>{e.preventDefault();const d=new FormData(f);
