@@ -3,67 +3,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css">
 <style>[hidden]{display:none!important}.ad{max-width:640px}.ad section{padding:1.4rem 0}.ad form{display:grid;gap:.8rem}.card{background:#fff;padding:1.2rem;border-radius:6px;border-left:5px solid var(--royal)}
 .ad input[type=file]{padding:1rem;border:2px dashed var(--royal);background:#fff}.pv,.lst{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:1rem 0}
-.pv img,.lst img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}.lst figure{margin:0}.lst button,.us button{border:0;background:var(--red);color:#fff;padding:.4rem .7rem;border-radius:4px;font-size:.85rem;cursor:pointer}.lst button{width:100%;margin-top:4px}
-.us div{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #e3dcc8}.out{float:right;background:none;border:2px solid #fff;color:#fff;border-radius:4px;padding:.3rem .8rem;cursor:pointer}
-#msg{font-weight:600;color:var(--navy);margin:1rem 0;min-height:1.5em}small{color:var(--mute)}</style></head><body>
+.pv img,.lst img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}.lst figure{margin:0}.lst button{width:100%;margin-top:4px;border:0;background:var(--red);color:#fff;padding:.4rem;border-radius:4px;font-size:.85rem;cursor:pointer}
+.out{float:right;background:none;border:2px solid #fff;color:#fff;border-radius:4px;padding:.3rem .8rem;cursor:pointer}.row2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+#msg{font-weight:600;color:var(--navy);margin:1rem 0;min-height:1.5em}small,.lk{color:var(--mute)}.lk a{color:var(--royal)}</style></head><body>
 <div class="page-head"><div class="wrap ph"><div><h1>Admin</h1><p>Upload new project photos. The newest always appear first.</p></div><img src="images/logo-round.png" alt="" width="130" height="130"></div></div>
 <main class="wrap ad"><p id="msg">Loading...</p>
-<section id="setup" hidden><div class="card"><h2>First-time setup</h2><p class="lead">Create the admin username and password. You will use these to log in from any phone.</p>
-<form id="fs"><input id="s_tk" type="password" placeholder="GitHub token (github_pat_...)" autocomplete="off" required><input id="s_un" placeholder="Choose a username" autocapitalize="none" autocomplete="username" required><input id="s_pw" type="password" placeholder="Choose a password (12+ characters)" autocomplete="new-password" required><input id="s_pw2" type="password" placeholder="Repeat password" autocomplete="new-password" required><button class="btn" type="submit">Create admin</button></form></div></section>
-<section id="login" hidden><div class="card"><h2>Admin login</h2><form id="fl"><input id="l_un" placeholder="Username" autocapitalize="none" autocomplete="username" required><input id="l_pw" type="password" placeholder="Password" autocomplete="current-password" required><button class="btn" type="submit">Log in</button></form><p style="margin-top:1rem"><a href="#" id="tj">Have an invite code? Create your login</a></p></div></section>
-<section id="join" hidden><div class="card"><h2>Create your login</h2><p class="lead">Enter the invite code you were given, then choose your own username and password. Nobody else will see them.</p><form id="fj"><input id="j_code" placeholder="Invite code" autocapitalize="none" autocomplete="off" required><input id="j_un" placeholder="Choose a username" autocapitalize="none" autocomplete="username" required><input id="j_pw" type="password" placeholder="Choose a password (12+ characters)" autocomplete="new-password" required><input id="j_pw2" type="password" placeholder="Repeat password" autocomplete="new-password" required><button class="btn" type="submit">Create my login</button></form><p style="margin-top:1rem"><a href="#" id="bk">Back to login</a></p></div></section>
+<section id="auth" hidden><div class="card"><h2>Admin sign in</h2><form id="fl"><input id="em" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" required><input id="pw" type="password" placeholder="Password (8+ characters)" autocomplete="current-password" required>
+<div class="row2"><button class="btn" type="submit">Log in</button><button class="btn ghost" id="su" type="button" style="color:var(--navy);border-color:var(--navy)">Sign up</button></div></form>
+<p class="lk" style="margin-top:1rem"><a href="#" id="fp">Forgot password?</a><br><small>Only 2 admin accounts are allowed. New admins tap Sign up, then confirm the email they receive.</small></p></div></section>
+<section id="reset" hidden><div class="card"><h2>Set a new password</h2><form id="fr"><input id="np" type="password" placeholder="New password (8+ characters)" autocomplete="new-password" required><button class="btn" type="submit">Save password</button></form></div></section>
 <div id="panel" hidden><section><button class="out" id="lo" type="button">Log out</button><h2>Add photos</h2><p class="lead">Choose one or many photos. They are resized automatically.</p><input id="files" type="file" accept="image/*" multiple style="width:100%"><div class="pv" id="prev"></div>
-<button class="btn red" id="go" type="button">Upload photos</button></section>
-<section style="padding-top:0"><h2>Latest photos on the site</h2><div class="lst" id="list"></div></section>
-<section style="padding-top:0"><div class="card"><h2>Admins</h2><div class="us" id="us"></div><h3 style="margin-top:1.2rem">Invite a new admin</h3><small>Creates a one-time code. The new admin opens this page, taps "Have an invite code?" and picks his own username and password. You never see them.</small>
-<p style="margin-top:.8rem"><button class="btn" id="iv" type="button">Create invite code</button></p><p id="ic" style="font-size:1.6rem;font-weight:800;letter-spacing:.08em;word-break:break-all;color:var(--navy)"></p><p><small id="ip"></small> <button class="out" style="float:none;border-color:var(--red);color:var(--red)" id="ci" type="button">Cancel invites</button></p>
-<h3 style="margin-top:1.2rem">Change my password</h3><form id="fa" style="margin-top:.8rem"><input id="a_pw" type="password" placeholder="New password (12+ characters)" autocomplete="new-password" required><button class="btn" type="submit">Change password</button></form></div></section></div></main>
+<button class="btn red" id="go" type="button">Upload photos</button><p><small id="who"></small></p></section><section style="padding-top:0"><h2>Latest photos on the site</h2><div class="lst" id="list"></div></section></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const O='eqsedii',R='Top-Shield-Roofing-Expert',API=`https://api.github.com/repos/${O}/${R}/contents/`,$=i=>document.getElementById(i),msg=t=>$('msg').textContent=t;
-let T=sessionStorage.getItem('ghtoken')||'',U=null,D=null;const show=n=>['setup','login','join','panel'].forEach(x=>$(x).hidden=x!==n);
-const E=new TextEncoder(),b64=u=>btoa(String.fromCharCode(...new Uint8Array(u))),unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)),OK=/^[a-z0-9._-]{3,20}$/;
-async function key(pw,salt){const k=await crypto.subtle.importKey('raw',E.encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:300000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
-async function seal(t,pw){const s=crypto.getRandomValues(new Uint8Array(16)),i=crypto.getRandomValues(new Uint8Array(12));return{s:b64(s),i:b64(i),c:b64(await crypto.subtle.encrypt({name:'AES-GCM',iv:i},await key(pw,s),E.encode(t)))}}
-async function unseal(o,pw){return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb(o.i)},await key(pw,unb(o.s)),unb(o.c)))}
-async function gh(p,o={}){const r=await fetch(API+p,{...o,headers:{Authorization:'Bearer '+T,Accept:'application/vnd.github+json'}});
-if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(r.status==401?'Token rejected (expired?). Delete admins.json in your repo and set up again.':r.status+' '+(e.message||''))}return r.json()}
-const rd=j=>JSON.parse(atob(j.content.replace(/\n/g,'')));
-const getM=async()=>{const j=await gh('projects.json?t='+Date.now(),{cache:'no-store'});return{sha:j.sha,photos:rd(j).photos}};
-const putM=(photos,sha,m)=>gh('projects.json',{method:'PUT',body:JSON.stringify({message:m,content:btoa(JSON.stringify({photos},null,1)),sha})});
-const getA=async()=>{const j=await gh('admins.json?t='+Date.now(),{cache:'no-store'}),d=rd(j);return{sha:j.sha,users:d.users||{},inv:d.inv||[]}};
-const putA=(users,inv,sha,m)=>gh('admins.json',{method:'PUT',body:JSON.stringify({message:m,content:btoa(JSON.stringify({users,inv})),sha})});
-async function init(){if(T){enter();return}try{const r=await fetch('admins.json?'+Date.now(),{cache:'no-store'});D=r.ok?await r.json():null;U=D&&D.users}catch(e){U=null}
-msg('');show(U&&Object.keys(U).length?'login':'setup')}
-function enter(){msg('');show('panel');load();admins()}
-$('fs').onsubmit=async e=>{e.preventDefault();const tk=$('s_tk').value.trim(),un=$('s_un').value.trim().toLowerCase(),pw=$('s_pw').value;
-if(!OK.test(un))return msg('Username: 3 to 20 letters, numbers, dot, dash or underscore.');if(pw.length<12)return msg('Password must be at least 12 characters.');if(pw!==$('s_pw2').value)return msg('Passwords do not match.');
-msg('Creating admin...');T=tk;try{await gh('admins.json',{method:'PUT',body:JSON.stringify({message:'Create admin',content:btoa(JSON.stringify({users:{[un]:await seal(tk,pw)},inv:[]}))})});sessionStorage.setItem('ghtoken',tk);sessionStorage.setItem('ghuser',un);enter()}catch(x){T='';msg('Setup failed: '+x.message)}};
-$('fl').onsubmit=async e=>{e.preventDefault();const un=$('l_un').value.trim().toLowerCase(),u=(U||{})[un];msg('Checking...');
-try{if(!u)throw 0;T=await unseal(u,$('l_pw').value);sessionStorage.setItem('ghtoken',T);sessionStorage.setItem('ghuser',un);enter()}catch(x){T='';msg('Wrong username or password.')}};
-$('lo').onclick=()=>{sessionStorage.clear();location.reload()};
-async function admins(){try{const a=await getA(),n=Object.keys(a.users),me=sessionStorage.getItem('ghuser');$('ip').textContent=a.inv.length?a.inv.length+' pending invite(s)':'No pending invites';$('us').innerHTML=n.map(u=>`<div><span>${u}${u==me?' (you)':''}</span>${n.length>1?`<button data-u="${u}">Remove</button>`:''}</div>`).join('')}catch(e){$('us').textContent=e.message}}
-$('fa').onsubmit=async e=>{e.preventDefault();const pw=$('a_pw').value,un=sessionStorage.getItem('ghuser');if(!un)return msg('Log out and log in again first.');if(pw.length<12)return msg('Password must be at least 12 characters.');
-try{const a=await getA();if(!a.users[un])return msg('Your login was not found.');a.users[un]=await seal(T,pw);await putA(a.users,a.inv,a.sha,'Change password');$('fa').reset();msg('Password changed.')}catch(x){msg(x.message)}};
-const AL='abcdefghjkmnpqrstuvwxyz23456789';
-$('iv').onclick=async()=>{try{const code=[...crypto.getRandomValues(new Uint8Array(12))].map(x=>AL[x%AL.length]).join(''),a=await getA();a.inv.push(await seal(T,code));await putA(a.users,a.inv,a.sha,'New invite');
-$('ic').textContent=code.match(/.{4}/g).join('-');msg('Invite created. Give this code to the new admin privately. It is shown only once and works after 1 to 2 minutes.');admins()}catch(x){msg(x.message)}};
-$('ci').onclick=async()=>{try{const a=await getA();await putA(a.users,[],a.sha,'Cancel invites');$('ic').textContent='';msg('Invites cancelled.');admins()}catch(x){msg(x.message)}};
-$('tj').onclick=e=>{e.preventDefault();msg('');show('join')};$('bk').onclick=e=>{e.preventDefault();msg('');show('login')};
-$('fj').onsubmit=async e=>{e.preventDefault();const code=$('j_code').value.replace(/[^a-z0-9]/gi,'').toLowerCase(),un=$('j_un').value.trim().toLowerCase(),pw=$('j_pw').value;
-if(!OK.test(un))return msg('Username: 3 to 20 letters, numbers, dot, dash or underscore.');if(pw.length<12)return msg('Password must be at least 12 characters.');if(pw!==$('j_pw2').value)return msg('Passwords do not match.');
-msg('Checking...');let t=null,hit=null;for(const x of (D&&D.inv)||[]){try{t=await unseal(x,code);hit=x;break}catch(_){}}
-if(!t)return msg('Invalid or expired invite code.');T=t;
-try{const a=await getA();if(a.users[un]){T='';return msg('That username is taken. Choose another.')}a.users[un]=await seal(t,pw);await putA(a.users,a.inv.filter(x=>x.c!==hit.c),a.sha,'New admin joined');sessionStorage.setItem('ghtoken',t);sessionStorage.setItem('ghuser',un);enter()}catch(x){T='';msg('Could not finish: '+x.message)}};
-$('us').onclick=async e=>{const u=e.target.dataset.u;if(!u||!confirm('Remove admin '+u+'?'))return;try{const a=await getA();delete a.users[u];if(!Object.keys(a.users).length)return msg('Keep at least one admin.');await putA(a.users,a.inv,a.sha,'Remove admin');msg('Removed.');admins()}catch(x){msg(x.message)}};
-async function shrink(f){const bm=await createImageBitmap(f),s=Math.min(1,1600/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);
-c.getContext('2d').drawImage(bm,0,0,c.width,c.height);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82));return new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result.split(',')[1]);x.readAsDataURL(b)})}
+const SB="https://cvirdubkolrudhtmpvmy.supabase.co",SK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2aXJkdWJrb2xydWRodG1wdm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNzMyOTksImV4cCI6MjEwNzY0OTI5OX0.CRYHHjfdCCtfoBoN6Xoo5OpR6Z78reyJpgMvqi_lZkc",sb=supabase.createClient(SB,SK),$=i=>document.getElementById(i),msg=t=>$('msg').textContent=t,BK=SB+'/storage/v1/object/public/projects/';
+const show=n=>['auth','reset','panel'].forEach(x=>$(x).hidden=x!==n),back=location.origin+'/admin.html';
+const err=e=>/database error|limit/i.test(e.message)?'Sign-up is closed. Only 2 admins are allowed.':e.message;
+async function start(){if(/type=recovery/.test(location.hash)){msg('');show('reset');return}const{data:{session}}=await sb.auth.getSession();session?enter(session):(msg(''),show('auth'))}
+function enter(s){msg('');$('who').textContent='Signed in as '+s.user.email;show('panel');load();if(location.hash)history.replaceState(null,'',location.pathname)}
+$('fl').onsubmit=async e=>{e.preventDefault();msg('Logging in...');const{data,error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});error?msg(/confirm/i.test(error.message)?'Please confirm your email first. Check your inbox.':error.message):enter(data.session)};
+$('su').onclick=async()=>{const email=$('em').value.trim(),password=$('pw').value;if(!email||password.length<8)return msg('Enter your email and a password of 8+ characters.');msg('Creating account...');
+const{data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:back}});if(error)return msg(err(error));msg(data.session?'Account created.':'Check your email and tap the confirmation link, then log in here.');if(data.session)enter(data.session)};
+$('fp').onclick=async e=>{e.preventDefault();const email=$('em').value.trim();if(!email)return msg('Type your email above first.');const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:back});msg(error?error.message:'Password reset email sent. Check your inbox.')};
+$('fr').onsubmit=async e=>{e.preventDefault();const{error}=await sb.auth.updateUser({password:$('np').value});if(error)return msg(error.message);history.replaceState(null,'',location.pathname);msg('Password updated.');start()};
+$('lo').onclick=async()=>{await sb.auth.signOut();location.hash='';location.reload()};
 $('files').onchange=()=>{$('prev').innerHTML=[...$('files').files].map(f=>`<img src="${URL.createObjectURL(f)}">`).join('')};
-async function load(){try{const m=await getM();$('list').innerHTML=m.photos.slice(0,12).map(p=>`<figure><img loading="lazy" src="https://raw.githubusercontent.com/${O}/${R}/HEAD/images/projects/${p}"><button data-p="${p}">Remove</button></figure>`).join('')}catch(e){$('list').textContent='Could not load photos: '+e.message}}
-$('go').onclick=async()=>{const fs=[...$('files').files];if(!fs.length)return msg('Choose photos first.');$('go').disabled=true;const ok=[],bad=[],st=Date.now();
-for(let i=0;i<fs.length;i++){try{msg(`Uploading ${i+1} of ${fs.length}...`);const n=`u${st}-${i}.jpg`;await gh('images/projects/'+n,{method:'PUT',body:JSON.stringify({message:'Add project photo',content:await shrink(fs[i])})});ok.push(n)}catch(e){bad.push(i+1+' ('+e.message+')')}}
-if(ok.length){try{const m=await getM();await putM([...ok,...m.photos],m.sha,'Add '+ok.length+' project photos');msg(`Done. ${ok.length} photo(s) added at the top. They show on the site in 1 to 2 minutes.`+(bad.length?' Failed: '+bad.join(', '):''));$('files').value='';$('prev').innerHTML='';load()}catch(e){msg('Photos uploaded but the list update failed: '+e.message)}}
-else msg('Nothing uploaded. '+bad.join(', '));$('go').disabled=false};
-$('list').onclick=async e=>{const p=e.target.dataset.p;if(!p||!confirm('Remove this photo from the site?'))return;
-try{const m=await getM();await putM(m.photos.filter(x=>x!==p),m.sha,'Remove photo');try{const f=await gh('images/projects/'+p,{cache:'no-store'});await gh('images/projects/'+p,{method:'DELETE',body:JSON.stringify({message:'Delete photo',sha:f.sha})})}catch(_){}msg('Removed.');load()}catch(err){msg(err.message)}};
-init();
+async function shrink(f){const bm=await createImageBitmap(f),s=Math.min(1,1600/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);return new Promise(r=>c.toBlob(r,'image/jpeg',.82))}
+async function load(){const{data,error}=await sb.from('photos').select('id,path').order('created_at',{ascending:false}).limit(12);if(error){$('list').textContent='Could not load: '+error.message;return}
+$('list').innerHTML=data.length?data.map(p=>`<figure><img loading="lazy" src="${BK}${p.path}"><button data-id="${p.id}" data-p="${p.path}">Remove</button></figure>`).join(''):'<small>No photos uploaded here yet. Your earlier photos stay on the site.</small>'}
+$('go').onclick=async()=>{const fs=[...$('files').files];if(!fs.length)return msg('Choose photos first.');$('go').disabled=true;let ok=0;const bad=[],t0=Date.now();
+for(let i=0;i<fs.length;i++){try{msg(`Uploading ${i+1} of ${fs.length}...`);const path=`${t0}-${i}-${Math.random().toString(36).slice(2,7)}.jpg`;
+let r=await sb.storage.from('projects').upload(path,await shrink(fs[i]),{contentType:'image/jpeg',cacheControl:'31536000'});if(r.error)throw r.error;
+r=await sb.from('photos').insert({path,created_at:new Date(t0+(fs.length-i)*1000).toISOString()});if(r.error)throw r.error;ok++}catch(e){bad.push(i+1+' ('+e.message+')')}}
+msg(ok?`Done. ${ok} photo(s) added at the top. They show on the site right away.`+(bad.length?' Failed: '+bad.join(', '):''):'Nothing uploaded. '+bad.join(', '));if(ok){$('files').value='';$('prev').innerHTML='';load()}$('go').disabled=false};
+$('list').onclick=async e=>{const id=e.target.dataset.id;if(!id||!confirm('Remove this photo from the site?'))return;
+const a=await sb.from('photos').delete().eq('id',id);if(a.error)return msg(a.error.message);await sb.storage.from('projects').remove([e.target.dataset.p]);msg('Removed.');load()};
+start();
 </script></body></html>
